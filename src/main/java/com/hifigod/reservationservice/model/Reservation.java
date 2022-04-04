@@ -20,6 +20,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Reservation implements Serializable {
 
+    // TODO: handle validations
+
     @Id
     private String id;
 
@@ -39,9 +41,9 @@ public class Reservation implements Serializable {
     private String message;
 
     @Column(length = 254)
-    private String code;
+    private String reservationCode;
 
-//    private String barCode;
+//    private String qrCode;
 
     @CreationTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

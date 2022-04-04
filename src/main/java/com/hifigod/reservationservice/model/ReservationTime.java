@@ -25,11 +25,17 @@ public class ReservationTime implements Serializable {
     private Reservation reservation;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Column(nullable = false)
     private LocalDate reservedDate;
 
+    @Column(nullable = false)
+    private String session;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    @Column(nullable = false)
     private LocalTime startTime;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    @Column(nullable = false)
     private LocalTime endTime;
 }

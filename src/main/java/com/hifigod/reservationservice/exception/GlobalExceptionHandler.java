@@ -22,4 +22,15 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<?> handleValidationException(ValidationException ex, WebRequest request) {
+        Response errorDetails = new Response(HttpStatus.BAD_REQUEST.value(),
+                request.getDescription(false),
+                ex.getMessage(),
+                LocalDateTime.now(),
+                null);
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
 }
