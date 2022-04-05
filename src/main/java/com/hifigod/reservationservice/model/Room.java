@@ -1,5 +1,6 @@
 package com.hifigod.reservationservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,9 +21,11 @@ public class Room implements Serializable {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "hostId", referencedColumnName = "id")
+    @JsonIgnoreProperties({"reservations", "rooms"})
     private User user;
 
     @OneToMany(mappedBy = "room")
+    @JsonIgnoreProperties("room")
     private List<Reservation> reservations;
 
 }

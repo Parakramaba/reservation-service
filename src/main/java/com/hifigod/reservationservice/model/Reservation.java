@@ -1,6 +1,7 @@
 package com.hifigod.reservationservice.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,9 @@ import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -27,11 +30,25 @@ public class Reservation implements Serializable {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "reservedUserId", referencedColumnName = "id")
+    @JsonIgnoreProperties({"reservations", "rooms"})
     private User user;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "roomId", referencedColumnName = "id")
+    @JsonIgnoreProperties({"reservations", "user"})
     private Room room;
+
+//    @Column(nullable = false)
+//    private LocalDate reservedDate;
+
+    @Column(nullable = false)
+    private String session;
+
+    @Column(nullable = false)
+    private LocalDateTime startTime;
+
+    @Column(nullable = false)
+    private LocalDateTime endTime;
 
     @Generated(value = GenerationTime.ALWAYS)
     @Column(nullable = false, length = 20, columnDefinition = "varchar(20) default 'Pending'")
@@ -46,10 +63,10 @@ public class Reservation implements Serializable {
 //    private String qrCode;
 
     @CreationTimestamp
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "reservation")
-    private List<ReservationTime> reservationTimes;
+//    @OneToMany(mappedBy = "reservation")
+//    @JsonIgnoreProperties("reservation")
+//    private List<ReservationTime> reservationTimes;
 
 }
