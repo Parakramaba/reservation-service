@@ -1,5 +1,6 @@
 package com.hifigod.reservationservice.service;
 
+import com.hifigod.reservationservice.dto.ReservationCancelRejectDto;
 import com.hifigod.reservationservice.dto.ReservationDto;
 //import com.hifigod.reservationservice.dto.ReservationTimeDto;
 import com.hifigod.reservationservice.dto.Response;
@@ -18,10 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -88,10 +86,10 @@ public class ReservationService {
         Response response = new Response();
         response.setMessage("Your reservation has been made successfully");
         response.setDateTime(LocalDateTime.now());
-        response.setStatus(HttpStatus.OK.value());
+        response.setStatus(HttpStatus.CREATED.value());
         response.setData(reservation.getId());
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
     // / MAKE A NEW RESERVATION
 
@@ -142,4 +140,20 @@ public class ReservationService {
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
     // / ROOM RESERVATIONS
+
+    // CANCEL A RESERVATION
+    public ResponseEntity<?> cancelReservation(ReservationCancelRejectDto cancelDto) throws ResourceNotFoundException {
+        Reservation reservation = reservationRepository.findById(cancelDto.getReservationId()).orElseThrow(()
+                -> new ResourceNotFoundException("Reservation not found : " + cancelDto.getReservationId()));
+
+        reservation.setStatus("Cancelled");
+        if(cancelDto.getMessage() != null && cancelDto.getMessage().length() > 0)
+            reservation.setMessage(cancelDto.getMessage());
+        reservation.setCancelledAt(LocalDateTime.now());
+        reservationRepository.save(reservation);
+
+        return new ResponseEntity<>("Your reservation has been cancelled", HttpStatus.OK);
+    }
+    // / CANCEL A RESERVATION
+
 }

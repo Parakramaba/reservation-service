@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -39,7 +40,7 @@ public class Reservation implements Serializable {
     private Room room;
 
 //    @Column(nullable = false)
-//    private LocalDate reservedDate;
+//    private LocalDate reservedAt;
 
     @Column(nullable = false)
     private String session;
@@ -50,9 +51,15 @@ public class Reservation implements Serializable {
     @Column(nullable = false)
     private LocalDateTime endTime;
 
-    @Generated(value = GenerationTime.ALWAYS)
-    @Column(nullable = false, length = 20, columnDefinition = "varchar(20) default 'Pending'")
+    @Generated(value = GenerationTime.INSERT)
+    @Column(columnDefinition = "varchar(20) default 'Pending'")
     private String status;
+
+    private LocalDateTime confirmedAt;
+
+    private LocalDateTime cancelledAt;
+
+    private LocalDateTime rejectedAt;
 
     @Column(columnDefinition = "text")
     private String message;

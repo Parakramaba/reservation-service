@@ -1,5 +1,6 @@
 package com.hifigod.reservationservice.controller;
 
+import com.hifigod.reservationservice.dto.ReservationCancelRejectDto;
 import com.hifigod.reservationservice.dto.ReservationDto;
 import com.hifigod.reservationservice.dto.Response;
 import com.hifigod.reservationservice.exception.ResourceNotFoundException;
@@ -52,4 +53,12 @@ public class ReservationController {
         return reservationService.getUpcomingReservationsOfRoom(roomId);
     }
     // / ROOM RESERVATIONS
+
+    // CANCEL A RESERVATION
+    @PutMapping("/cancel")
+    @ApiOperation(value = "Cancel a reservation")
+    public ResponseEntity<?> cancelReservation(@RequestBody ReservationCancelRejectDto cancelDto) throws ResourceNotFoundException {
+        return reservationService.cancelReservation(cancelDto);
+    }
+    // / CANCEL A RESERVATION
 }
