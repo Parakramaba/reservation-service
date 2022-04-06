@@ -84,7 +84,7 @@ public class ReservationService {
 //        reservationTimeRepository.saveAll(reservationTimes);
 
         Response response = new Response();
-        response.setMessage("Your reservation has been made successfully");
+        response.setMessage("Reservation has been made successfully");
         response.setDateTime(LocalDateTime.now());
         response.setStatus(HttpStatus.CREATED.value());
         response.setData(reservation.getId());
@@ -152,8 +152,23 @@ public class ReservationService {
         reservation.setCancelledAt(LocalDateTime.now());
         reservationRepository.save(reservation);
 
-        return new ResponseEntity<>("Your reservation has been cancelled", HttpStatus.OK);
+        return new ResponseEntity<>("Reservation has been cancelled", HttpStatus.OK);
     }
     // / CANCEL A RESERVATION
+
+    // REJECT A RESERVATION
+    public ResponseEntity<?> rejectReservation(ReservationCancelRejectDto rejectDto) throws ResourceNotFoundException {
+        Reservation reservation = reservationRepository.findById(rejectDto.getReservationId()).orElseThrow(()
+                -> new ResourceNotFoundException("Reservation not found : " + rejectDto.getReservationId()));
+
+        reservation.setStatus("Rejected");
+        if(rejectDto.getMessage() != null && rejectDto.getMessage().length() > 0)
+            reservation.setMessage(rejectDto.getMessage());
+        reservation.setRejectedAt(LocalDateTime.now());
+        reservationRepository.save(reservation);
+
+        return new ResponseEntity<>("Reservation has been rejected", HttpStatus.OK);
+    }
+    // / REJECT A RESERVATION
 
 }

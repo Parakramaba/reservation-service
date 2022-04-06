@@ -61,4 +61,13 @@ public class ReservationController {
         return reservationService.cancelReservation(cancelDto);
     }
     // / CANCEL A RESERVATION
+
+    // REJECT A RESERVATION
+    @PutMapping("/reject")
+    @ApiOperation(value = "Reject a reservation")
+    public ResponseEntity<?> rejectReservation(@RequestBody ReservationCancelRejectDto rejectDto) throws ResourceNotFoundException {
+        return reservationService.rejectReservation(rejectDto);
+    }
+    // / REJECT A RESERVATION
+
 }
