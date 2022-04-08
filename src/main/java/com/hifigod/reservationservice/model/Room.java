@@ -1,9 +1,7 @@
 package com.hifigod.reservationservice.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.*;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,9 +9,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "room")
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Room implements Serializable {
 
     @Id
@@ -21,11 +21,16 @@ public class Room implements Serializable {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "hostId", referencedColumnName = "id")
-    @JsonIgnoreProperties({"reservations", "rooms"})
+//    @JsonIgnoreProperties({"reservations", "rooms"})
     private User user;
 
     @OneToMany(mappedBy = "room")
     @JsonIgnoreProperties("room")
     private List<Reservation> reservations;
+
+    @OneToMany(mappedBy = "room")
+//    @JsonManagedReference
+    @JsonIgnore
+    private List<RoomReservedTime> reservedTimes;
 
 }

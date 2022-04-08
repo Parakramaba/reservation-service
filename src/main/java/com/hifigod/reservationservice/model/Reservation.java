@@ -1,27 +1,23 @@
 package com.hifigod.reservationservice.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 @Entity
 @Table(name = "reservation")
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Reservation implements Serializable {
 
     // TODO: handle validations
@@ -31,7 +27,7 @@ public class Reservation implements Serializable {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "reservedUserId", referencedColumnName = "id")
-    @JsonIgnoreProperties({"reservations", "rooms"})
+//    @JsonIgnoreProperties({"reservations", "rooms"})
     private User user;
 
     @ManyToOne(optional = false)
@@ -75,5 +71,9 @@ public class Reservation implements Serializable {
 //    @OneToMany(mappedBy = "reservation")
 //    @JsonIgnoreProperties("reservation")
 //    private List<ReservationTime> reservationTimes;
+
+    @OneToMany(mappedBy = "reservation")
+    @JsonIgnore
+    private List<RoomReservedTime> reservedTimes;
 
 }

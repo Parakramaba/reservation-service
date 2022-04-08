@@ -13,7 +13,8 @@
 //
 //@Entity
 //@Table(name = "reservationTime")
-//@Data
+//@Setter
+//@Getter
 //@AllArgsConstructor
 //@NoArgsConstructor
 //public class ReservationTime implements Serializable {

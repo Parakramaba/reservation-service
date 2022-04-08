@@ -57,16 +57,16 @@ public class ReservationController {
     // CANCEL A RESERVATION
     @PutMapping("/cancel")
     @ApiOperation(value = "Cancel a reservation")
-    public ResponseEntity<?> cancelReservation(@RequestBody ReservationCancelRejectDto cancelDto) throws ResourceNotFoundException {
-        return reservationService.cancelReservation(cancelDto);
+    public ResponseEntity<?> cancelReservation(@RequestBody ReservationCancelRejectDto reservationCancelDto) throws ResourceNotFoundException {
+        return reservationService.cancelReservation(reservationCancelDto);
     }
     // / CANCEL A RESERVATION
 
     // REJECT A RESERVATION
     @PutMapping("/reject")
     @ApiOperation(value = "Reject a reservation")
-    public ResponseEntity<?> rejectReservation(@RequestBody ReservationCancelRejectDto rejectDto) throws ResourceNotFoundException {
-        return reservationService.rejectReservation(rejectDto);
+    public ResponseEntity<?> rejectReservation(@RequestBody ReservationCancelRejectDto reservationRejectDto) throws ResourceNotFoundException {
+        return reservationService.rejectReservation(reservationRejectDto);
     }
     // / REJECT A RESERVATION
 

@@ -10,10 +10,11 @@
 //import java.time.LocalDate;
 //import java.time.LocalTime;
 //
-//@Data
 //@ApiModel(description = "Time slots of reservation")
 //@AllArgsConstructor
 //@NoArgsConstructor
+//@Setter
+//@Getter
 //public class ReservationTimeDto {
 //
 //    @ApiModelProperty(notes = "Reserved date")

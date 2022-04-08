@@ -3,19 +3,15 @@ package com.hifigod.reservationservice.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.List;
 
-@Data
-@ApiModel(description = "Details about the reservation")
+@ApiModel(description = "Details of the reservation")
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Getter
 public class ReservationDto {
 
     @ApiModelProperty(notes = "Valid user id who make the reservation")
@@ -26,6 +22,7 @@ public class ReservationDto {
 
 //    private LocalDate reservedDate;
 
+    @ApiModelProperty(notes = "Morning or Evening")
     private String session;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
