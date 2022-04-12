@@ -17,12 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping("/api/reservations")
+@RequestMapping("/api/v1/reservations")
 public class ReservationController {
 
     @Autowired
     private ReservationService reservationService;
 
+    // MAKE A NEW RESERVATION
     @PostMapping("/new")
     @ApiOperation(value = "Make a reservation",
             notes = "Provide valid reservation details to make a reservation")
@@ -30,6 +31,15 @@ public class ReservationController {
             throws ResourceNotFoundException, ValidationException {
         return reservationService.makeReservation(reservationDto);
     }
+    // / MAKE A NEW RESERVATION
+
+    // GET RESERVATION DETAILS
+    @GetMapping("/{reservationId}")
+    @ApiOperation(value = "Get the reservation details")
+    ResponseEntity<?> getReservationDetails(@PathVariable("reservationId") String reservationId) throws ResourceNotFoundException {
+        return reservationService.getReservationDetails(reservationId);
+    }
+    // / GET RESERVATION DETAILS
 
     // USER RESERVATIONS
     @GetMapping("/past/of-user/{userId}")

@@ -118,6 +118,14 @@ public class ReservationService {
     }
     // / MAKE A NEW RESERVATION
 
+    // GET RESERVATION DETAILS
+    public ResponseEntity<?> getReservationDetails(String reservationId) throws ResourceNotFoundException {
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(()
+                -> new ResourceNotFoundException("Reservation not found : " + reservationId));
+        return new ResponseEntity<>(reservation, HttpStatus.OK);
+    }
+    // / GET RESERVATION DETAILS
+
     // USER RESERVATIONS
     public ResponseEntity<?> getPastReservationsOfUser(String userId) throws ResourceNotFoundException {
         User user = userRepository.findById(userId).orElseThrow(()
