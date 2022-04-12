@@ -1,9 +1,6 @@
 package com.hifigod.reservationservice.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,11 +23,13 @@ public class RoomReservedTime implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(name = "roomId", referencedColumnName = "id")
 //    @JsonBackReference
+    @JsonIgnoreProperties({"reservations", "user"})
     private Room room;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "reservationId", referencedColumnName = "id")
 //    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler","FieldHandler"})
+    @JsonIgnore
     private Reservation reservation;
 
     @Column(nullable = false)

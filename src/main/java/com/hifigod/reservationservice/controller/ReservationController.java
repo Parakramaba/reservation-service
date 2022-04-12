@@ -7,9 +7,14 @@ import com.hifigod.reservationservice.exception.ResourceNotFoundException;
 import com.hifigod.reservationservice.exception.ValidationException;
 import com.hifigod.reservationservice.service.ReservationService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -53,6 +58,16 @@ public class ReservationController {
         return reservationService.getUpcomingReservationsOfRoom(roomId);
     }
     // / ROOM RESERVATIONS
+
+    // GET RESERVED TIMES OF A ROOM
+    @GetMapping("/reserved-times/{roomId}/{date}")
+    @ApiOperation(value = "Get reserved times of a room by date",
+            notes = "Provide valid roomId and Date in format of yyyy-MM-dd")
+    public ResponseEntity<?> getRoomReservedTimesByDate(@PathVariable("roomId") String roomId, @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date)
+            throws ResourceNotFoundException {
+        return reservationService.getRoomReservedTimesByDate(roomId, date);
+    }
+    // / GET RESERVED TIMES OF A ROOM
 
     // CANCEL A RESERVATION
     @PutMapping("/cancel")
