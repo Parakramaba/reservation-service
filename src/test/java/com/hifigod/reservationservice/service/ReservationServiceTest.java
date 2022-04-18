@@ -11,6 +11,7 @@ import com.hifigod.reservationservice.repository.RoomRepository;
 import com.hifigod.reservationservice.repository.RoomReservedTimeRepository;
 import com.hifigod.reservationservice.repository.UserRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -138,27 +139,125 @@ class ReservationServiceTest {
     }
     // / GET PAST RESERVATIONS OF USER
 
+    // GET UPCOMING RESERVATIONS OF USER
     @Test
-    void getUpcomingReservationsOfUser() {
+    void getUpcomingReservationsOfUser_WhenUpcomingReservationsFound_Success() {
+        User user = new MockObjects().getUser1();
+        Reservation reservation1 = new MockObjects().getReservation1();
+        Reservation reservation2 = new MockObjects().getReservation2();
+
+        when(userRepository.findById("U-111"))
+                .thenReturn(Optional.of(user));
+        when(reservationRepository.findAllByUserIdAndStartTimeAfter(eq("U-111"), any(LocalDateTime.class)))
+                .thenReturn(Stream.of(reservation1, reservation2).collect(Collectors.toList()));
+
+        List<Reservation> reservations = (ArrayList)reservationService.getUpcomingReservationsOfUser("U-111").getBody();
+        assertEquals(2, reservations.size(), "Should return 2");
+        verify(reservationRepository, times(1))
+                .findAllByUserIdAndStartTimeAfter(eq("U-111"), any(LocalDateTime.class));
     }
 
     @Test
-    void getPastReservationsOfRoom() {
+    void getUpcomingReservationsOfUser_WhenNoUpcomingReservationsFound_Success() {
+        User user = new MockObjects().getUser1();
+
+        when(userRepository.findById("U-111"))
+                .thenReturn(Optional.of(user));
+        when(reservationRepository.findAllByUserIdAndStartTimeAfter(eq("U-111"), any(LocalDateTime.class)))
+                .thenReturn(Collections.emptyList());
+
+        assertEquals(HttpStatus.OK, reservationService.getUpcomingReservationsOfUser("U-111").getStatusCode(),
+                "Should return Status code '200 OK'");
+        verify(reservationRepository, times(1))
+                .findAllByUserIdAndStartTimeAfter(eq("U-111"), any(LocalDateTime.class));
     }
 
+    @Test
+    void getUpcomingReservationsOfUser_WhenUserNotFound_ThrowResourceNotFoundException() {
+        Reservation reservation = new MockObjects().getReservation1();
+
+        when(userRepository.findById("U-111"))
+                .thenThrow(ResourceNotFoundException.class);
+        when(reservationRepository.findAllByUserIdAndStartTimeAfter(eq("U-111"), any(LocalDateTime.class)))
+                .thenReturn(Stream.of(reservation).collect(Collectors.toList()));
+
+        assertThrows(ResourceNotFoundException.class, () -> reservationService.getUpcomingReservationsOfUser("U-111"),
+                "Should throw ResourceNotFoundException");
+        verify(userRepository, times(1)).findById("U-111");
+        verify(reservationRepository, never()).findAllByUserIdAndStartTimeAfter(eq("U-111"), any(LocalDateTime.class));
+    }
+    // / GET UPCOMING RESERVATIONS OF USER
+
+    // GET PAST RESERVATIONS OF ROOM
+    @Test
+    void getPastReservationsOfRoom_WhenPastReservationsFound_Success() {
+        Room room = new MockObjects().getRoom1();
+        Reservation reservation1 = new MockObjects().getReservation1();
+        Reservation reservation2 = new MockObjects().getReservation3();
+
+        when(roomRepository.findById("R-111"))
+                .thenReturn(Optional.of(room));
+        when(reservationRepository.findAllByRoomIdAndEndTimeBefore(eq("R-111"), any(LocalDateTime.class)))
+                .thenReturn(Stream.of(reservation1, reservation2).collect(Collectors.toList()));
+
+        List<Reservation> reservations = (ArrayList)reservationService.getPastReservationsOfRoom("R-111").getBody();
+        assertEquals(2, reservations.size(), "Should return 2");
+        verify(reservationRepository, times(1))
+                .findAllByRoomIdAndEndTimeBefore(eq("R-111"), any(LocalDateTime.class));
+    }
+
+    @Test
+    void getPastReservationsOfRoom_WhenNoPastReservationsFound_Success() {
+        Room room = new MockObjects().getRoom1();
+
+        when(roomRepository.findById("R-111"))
+                .thenReturn(Optional.of(room));
+        when(reservationRepository.findAllByRoomIdAndEndTimeBefore(eq("R-111"), any(LocalDateTime.class)))
+                .thenReturn(Collections.emptyList());
+
+        assertEquals(HttpStatus.OK, reservationService.getPastReservationsOfRoom("R-111").getStatusCode(),
+                "Should return Status code '200 OK'");
+        verify(reservationRepository, times(1))
+                .findAllByRoomIdAndEndTimeBefore(eq("R-111"), any(LocalDateTime.class));
+    }
+
+    @Test
+    void getPastReservationsOfRoom_WhenRoomNotFound_ThrowResourceNotFoundException() {
+        Reservation reservation = new MockObjects().getReservation1();
+
+        when(roomRepository.findById("R-111"))
+                .thenThrow(ResourceNotFoundException.class);
+        when(reservationRepository.findAllByRoomIdAndEndTimeBefore(eq("R-111"), any(LocalDateTime.class)))
+                .thenReturn(Stream.of(reservation).collect(Collectors.toList()));
+
+        assertThrows(ResourceNotFoundException.class, () -> reservationService.getPastReservationsOfRoom("R-111"),
+                "Should throw ResourceNotFoundException");
+        verify(roomRepository, times(1)).findById("R-111");
+        verify(reservationRepository, never()).findAllByRoomIdAndEndTimeBefore(eq("R-111"), any(LocalDateTime.class));
+    }
+    // / GET PAST RESERVATIONS OF ROOM
+
+    // GET UPCOMING RESERVATIONS OF ROOM
     @Test
     void getUpcomingReservationsOfRoom() {
     }
+    // / GET UPCOMING RESERVATIONS OF ROOM
 
+    // GET ROOM RESERVED TIMES BY DATE
     @Test
     void getRoomReservedTimesByDate() {
     }
+    // / GET ROOM RESERVED TIMES BY DATE
 
+    // CANCEL RESERVATION
     @Test
     void cancelReservation() {
     }
+    // / CANCEL RESERVATION
 
+    // REJECT RESERVATION
     @Test
     void rejectReservation() {
     }
+    // /REJECT RESERVATION
 }
