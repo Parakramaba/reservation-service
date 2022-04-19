@@ -1,5 +1,6 @@
 package com.hifigod.reservationservice.service;
 
+import com.hifigod.reservationservice.dto.ReservationCancelRejectDto;
 import com.hifigod.reservationservice.dto.ReservationDto;
 import com.hifigod.reservationservice.model.Reservation;
 import com.hifigod.reservationservice.model.Room;
@@ -53,5 +54,9 @@ public class MockObjects {
             LocalDate.of(2022, 4, 11), LocalTime.of(17, 30, 0));
     private RoomReservedTime reservedTime2 = new RoomReservedTime(UUID.randomUUID().toString(), room1, reservation1,
             LocalDate.of(2022, 4, 11), LocalTime.of(18, 0, 0));
+
+    // ReservationCancelRejectDto
+    private ReservationCancelRejectDto cancelRejectDto = new ReservationCancelRejectDto("RES-111",
+            "The maximum number of guests are exceeded");
 
 }

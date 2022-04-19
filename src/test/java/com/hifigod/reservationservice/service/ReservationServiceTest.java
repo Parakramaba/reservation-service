@@ -1,10 +1,12 @@
 package com.hifigod.reservationservice.service;
 
+import com.hifigod.reservationservice.dto.ReservationCancelRejectDto;
 import com.hifigod.reservationservice.dto.ReservationDto;
 import com.hifigod.reservationservice.exception.ResourceNotFoundException;
 import com.hifigod.reservationservice.exception.ValidationException;
 import com.hifigod.reservationservice.model.Reservation;
 import com.hifigod.reservationservice.model.Room;
+import com.hifigod.reservationservice.model.RoomReservedTime;
 import com.hifigod.reservationservice.model.User;
 import com.hifigod.reservationservice.repository.ReservationRepository;
 import com.hifigod.reservationservice.repository.RoomRepository;
@@ -17,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,6 +48,7 @@ class ReservationServiceTest {
 
     @MockBean
     private RoomReservedTimeRepository roomReservedTimeRepository;
+
 
     // TODO: complete the test cases of makeReservation
     // MAKE RESERVATION
@@ -184,7 +188,8 @@ class ReservationServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> reservationService.getUpcomingReservationsOfUser("U-111"),
                 "Should throw ResourceNotFoundException");
         verify(userRepository, times(1)).findById("U-111");
-        verify(reservationRepository, never()).findAllByUserIdAndStartTimeAfter(eq("U-111"), any(LocalDateTime.class));
+        verify(reservationRepository, never())
+                .findAllByUserIdAndStartTimeAfter(eq("U-111"), any(LocalDateTime.class));
     }
     // / GET UPCOMING RESERVATIONS OF USER
 
@@ -233,31 +238,173 @@ class ReservationServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> reservationService.getPastReservationsOfRoom("R-111"),
                 "Should throw ResourceNotFoundException");
         verify(roomRepository, times(1)).findById("R-111");
-        verify(reservationRepository, never()).findAllByRoomIdAndEndTimeBefore(eq("R-111"), any(LocalDateTime.class));
+        verify(reservationRepository, never())
+                .findAllByRoomIdAndEndTimeBefore(eq("R-111"), any(LocalDateTime.class));
     }
     // / GET PAST RESERVATIONS OF ROOM
 
     // GET UPCOMING RESERVATIONS OF ROOM
     @Test
-    void getUpcomingReservationsOfRoom() {
+    void getUpcomingReservationsOfRoom_WhenUpcomingReservationsFound_Success() {
+        Room room = new MockObjects().getRoom1();
+        Reservation reservation1 = new MockObjects().getReservation1();
+        Reservation reservation2 = new MockObjects().getReservation3();
+
+        when(roomRepository.findById("R-111"))
+                .thenReturn(Optional.of(room));
+        when(reservationRepository.findAllByRoomIdAndStartTimeAfter(eq("R-111"), any(LocalDateTime.class)))
+                .thenReturn(Stream.of(reservation1, reservation2).collect(Collectors.toList()));
+
+        List<Reservation> reservations = (ArrayList)reservationService.getUpcomingReservationsOfRoom("R-111").getBody();
+        assertEquals(2, reservations.size(), "Should return 2");
+        verify(reservationRepository, times(1))
+                .findAllByRoomIdAndStartTimeAfter(eq("R-111"), any(LocalDateTime.class));
+    }
+
+    @Test
+    void getUpcomingReservationsOfRoom_WhenNoUpcomingReservationsFound_Success() {
+        Room room = new MockObjects().getRoom1();
+
+        when(roomRepository.findById("R-111"))
+                .thenReturn(Optional.of(room));
+        when(reservationRepository.findAllByRoomIdAndStartTimeAfter(eq("R-111"), any(LocalDateTime.class)))
+                .thenReturn(Collections.emptyList());
+
+        assertEquals(HttpStatus.OK, reservationService.getUpcomingReservationsOfRoom("R-111").getStatusCode(),
+                "Should return Status code '200 OK'");
+        verify(reservationRepository, times(1))
+                .findAllByRoomIdAndStartTimeAfter(eq("R-111"), any(LocalDateTime.class));
+    }
+
+    @Test
+    void getUpcomingReservationsOfRoom_WhenRoomNotFound_ThrowResourceNotFoundException() {
+        Reservation reservation = new MockObjects().getReservation1();
+
+        when(roomRepository.findById("R-111"))
+                .thenThrow(ResourceNotFoundException.class);
+        when(reservationRepository.findAllByRoomIdAndStartTimeAfter(eq("R-111"), any(LocalDateTime.class)))
+                .thenReturn(Stream.of(reservation).collect(Collectors.toList()));
+
+        assertThrows(ResourceNotFoundException.class, () -> reservationService.getUpcomingReservationsOfRoom("R-111"),
+                "Should throw ResourceNotFoundException");
+        verify(roomRepository, times(1)).findById("R-111");
+        verify(reservationRepository, never()).findAllByRoomIdAndStartTimeAfter(eq("R-111"), any(LocalDateTime.class));
     }
     // / GET UPCOMING RESERVATIONS OF ROOM
 
     // GET ROOM RESERVED TIMES BY DATE
     @Test
-    void getRoomReservedTimesByDate() {
+    void getRoomReservedTimesByDate_WhenRoomReservedTimesFound_Success() {
+        Room room = new MockObjects().getRoom1();
+        RoomReservedTime reservedTime1 = new MockObjects().getReservedTime1();
+        RoomReservedTime reservedTime2 = new MockObjects().getReservedTime2();
+
+        when(roomRepository.findById("R-111"))
+                .thenReturn(Optional.of(room));
+        when(roomReservedTimeRepository.findAllByRoomIdAndReservedDate(eq("R-111"), any(LocalDate.class)))
+                .thenReturn(Stream.of(reservedTime1, reservedTime2).collect(Collectors.toList()));
+
+        List<RoomReservedTime> reservedTimes = (ArrayList)reservationService.getRoomReservedTimesByDate("R-111",
+                LocalDate.of(2022,4,11)).getBody();
+        assertEquals(2, reservedTimes.size(), "Should return 2");
+        verify(roomReservedTimeRepository, times(1))
+                .findAllByRoomIdAndReservedDate(eq("R-111"), any(LocalDate.class));
+    }
+
+    @Test
+    void getRoomReservedTimesByDate_WhenNoRoomReservedTimesFound_Success() {
+        Room room = new MockObjects().getRoom1();
+
+        when(roomRepository.findById("R-111"))
+                .thenReturn(Optional.of(room));
+        when(roomReservedTimeRepository.findAllByRoomIdAndReservedDate(eq("R-111"), any(LocalDate.class)))
+                .thenReturn(Collections.emptyList());
+
+        assertEquals(HttpStatus.OK, reservationService.getRoomReservedTimesByDate("R-111",
+                        LocalDate.of(2022,4,11)).getStatusCode(), "Should return Status code '200 OK'");
+        verify(roomReservedTimeRepository, times(1))
+                .findAllByRoomIdAndReservedDate(eq("R-111"), any(LocalDate.class));
+    }
+
+    @Test
+    void getRoomReservedTimesByDate_WhenRoomNotFound_ThrowResourceNotFoundException() {
+        RoomReservedTime reservedTime = new MockObjects().getReservedTime1();
+
+        when(roomRepository.findById("R-111"))
+                .thenThrow(ResourceNotFoundException.class);
+        when(roomReservedTimeRepository.findAllByRoomIdAndReservedDate(eq("R-111"), any(LocalDate.class)))
+                .thenReturn(Stream.of(reservedTime).collect(Collectors.toList()));
+
+        assertThrows(ResourceNotFoundException.class, () -> reservationService.getRoomReservedTimesByDate("R-111",
+                LocalDate.of(2022,2,11)), "Should throw ResourceNotFoundException");
+        verify(roomRepository, times(1)).findById("R-111");
+        verify(roomReservedTimeRepository, never()).findAllByRoomIdAndReservedDate(eq("R-111"), any(LocalDate.class));
     }
     // / GET ROOM RESERVED TIMES BY DATE
 
     // CANCEL RESERVATION
     @Test
-    void cancelReservation() {
+    void cancelReservation_Success() {
+        Reservation reservation = new MockObjects().getReservation1();
+        ReservationCancelRejectDto cancelDto = new MockObjects().getCancelRejectDto();
+
+        when(reservationRepository.findById("RES-111"))
+                .thenReturn(Optional.of(reservation));
+        when(reservationRepository.save(any(Reservation.class)))
+                .thenReturn(reservation);
+
+        assertEquals(HttpStatus.OK, reservationService.cancelReservation(cancelDto).getStatusCode(),
+                "Should return Status code '200 OK'");
+        verify(reservationRepository, times(1)).save(any(Reservation.class));
+    }
+
+    @Test
+    void cancelReservation_WhenReservationNotFound_ThrowResourceNotFoundException() {
+        Reservation reservation = new MockObjects().getReservation1();
+        ReservationCancelRejectDto cancelDto = new MockObjects().getCancelRejectDto();
+
+        when(reservationRepository.findById("RES-111"))
+                .thenThrow(ResourceNotFoundException.class);
+        when(reservationRepository.save(any(Reservation.class)))
+                .thenReturn(reservation);
+
+        assertThrows(ResourceNotFoundException.class, () -> reservationService.cancelReservation(cancelDto),
+                "Should throw ResourceNotFoundException");
+        verify(reservationRepository, times(1)).findById("RES-111");
+        verify(reservationRepository, never()).save(any(Reservation.class));
     }
     // / CANCEL RESERVATION
 
     // REJECT RESERVATION
     @Test
-    void rejectReservation() {
+    void rejectReservation_Success() {
+        Reservation reservation = new MockObjects().getReservation1();
+        ReservationCancelRejectDto rejectDto = new MockObjects().getCancelRejectDto();
+
+        when(reservationRepository.findById("RES-111"))
+                .thenReturn(Optional.of(reservation));
+        when(reservationRepository.save(any(Reservation.class)))
+                .thenReturn(reservation);
+
+        assertEquals(HttpStatus.OK, reservationService.rejectReservation(rejectDto).getStatusCode(),
+                "Should return Status code '200 OK'");
+        verify(reservationRepository, times(1)).save(any(Reservation.class));
     }
-    // /REJECT RESERVATION
+
+    @Test
+    void rejectReservation_WhenReservationNotFound_ThrowResourceNotFoundException() {
+        Reservation reservation = new MockObjects().getReservation1();
+        ReservationCancelRejectDto rejectDto = new MockObjects().getCancelRejectDto();
+
+        when(reservationRepository.findById("RES-111"))
+                .thenThrow(ResourceNotFoundException.class);
+        when(reservationRepository.save(any(Reservation.class)))
+                .thenReturn(reservation);
+
+        assertThrows(ResourceNotFoundException.class, () -> reservationService.rejectReservation(rejectDto),
+                "Should throw ResourceNotFoundException");
+        verify(reservationRepository, times(1)).findById("RES-111");
+        verify(reservationRepository, never()).save(any(Reservation.class));
+    }
+    // / REJECT RESERVATION
 }
