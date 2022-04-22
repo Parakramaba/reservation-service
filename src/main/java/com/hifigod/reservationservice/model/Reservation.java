@@ -63,7 +63,13 @@ public class Reservation implements Serializable {
     @Column(length = 254)
     private String reservationCode;
 
-//    private String qrCode;
+    private String qrCode;
+
+//    public String getQrCodePath() {
+//        if(qrCode == null)
+//            return null;
+//        return "/qrcode/" + qrCode;
+//    }
 
     @CreationTimestamp
     private LocalDateTime createdAt;

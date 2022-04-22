@@ -9,7 +9,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "roomReservedTime")
+@Table(name = "roomReservedTime",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"roomId", "reservedDate", "reservedTime"}))
 @Setter
 @Getter
 @AllArgsConstructor

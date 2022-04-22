@@ -36,17 +36,17 @@ public class MockObjects {
     private Reservation reservation1 = new Reservation(UUID.randomUUID().toString(), user1, room1, "Evening",
             LocalDateTime.of(2022, 4, 11, 17,30, 0),
             LocalDateTime.of(2022, 4, 11, 18, 30, 0), "Pending",
-            null, null, null, null, null, LocalDateTime.now(),
+            null, null, null, null, null,null, LocalDateTime.now(),
             Collections.emptyList());
     private Reservation reservation2 = new Reservation(UUID.randomUUID().toString(), user1, room2, "Morning",
             LocalDateTime.of(2022, 4, 10, 9,0, 0),
             LocalDateTime.of(2022, 4, 10, 10, 30, 0), "Pending",
-            null, null, null, null, null, LocalDateTime.now(),
+            null, null, null, null, null, null, LocalDateTime.now(),
             Collections.emptyList());
     private Reservation reservation3 = new Reservation(UUID.randomUUID().toString(), user2, room1, "Morning",
             LocalDateTime.of(2022, 4, 20, 10,0, 0),
             LocalDateTime.of(2022, 4, 20, 11, 0, 0), "Pending",
-            null, null, null, null, null, LocalDateTime.now(),
+            null, null, null, null, null, null, LocalDateTime.now(),
             Collections.emptyList());
 
     // RoomReservedTime

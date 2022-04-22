@@ -1,5 +1,10 @@
 package com.hifigod.reservationservice.service;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.hifigod.reservationservice.dto.ReservationCancelRejectDto;
 import com.hifigod.reservationservice.dto.ReservationDto;
 //import com.hifigod.reservationservice.dto.ReservationTimeDto;
@@ -21,8 +26,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -46,6 +56,11 @@ public class ReservationService {
     @Autowired
     private RoomReservedTimeRepository roomReservedTimeRepository;
     // / INJECT REPOSITORY OBJECT DEPENDENCIES
+
+    // PATH OF QRCODE DIRECTORY
+    // The absolute path on the local machine(at the moment) that need to store the QRCodes
+    // Ex : "D:\\reservation-service\\images\\qr-codes\\"
+    private String QRCODE_PATH = "";
 
 
     // MAKE A NEW RESERVATION
@@ -186,6 +201,46 @@ public class ReservationService {
         return new ResponseEntity<>(reservedTimes, HttpStatus.OK);
     }
     // / GET RESERVED TIMES OF A ROOM
+
+    // CONFIRM A RESERVATION
+    public ResponseEntity<?> confirmReservation(String reservationId)
+            throws ResourceNotFoundException, WriterException, IOException {
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(()
+                -> new ResourceNotFoundException("Reservation not found : " + reservationId));
+
+        // TODO: verify what details need to be hold by the QRCode and how to handle the documents
+
+        String qrCode = reservationId + "-QRCODE.png";
+        String qrCodePath = QRCODE_PATH + qrCode;
+        QRCodeWriter writer = new QRCodeWriter();
+        BitMatrix bitMatrix = null;
+        try {
+            // Convert time in 24Hours format to 12Hours format
+            String startTime = LocalTime.parse(reservation.getStartTime().toLocalTime().toString(),
+                    DateTimeFormatter.ofPattern("HH:mm")).format(DateTimeFormatter.ofPattern("hh:mm a"));
+            String endTime = LocalTime.parse(reservation.getEndTime().toLocalTime().toString(),
+                    DateTimeFormatter.ofPattern("HH:mm")).format(DateTimeFormatter.ofPattern("hh:mm a"));
+
+            // Generate the QRCode
+            bitMatrix = writer.encode("You have reservation on " + reservation.getStartTime().toLocalDate()
+                    + " from " + startTime + " to " + endTime, BarcodeFormat.QR_CODE, 350, 350);
+        } catch (WriterException e) {
+            throw new WriterException("Is currently unable to handle this request");
+        }
+        Path path = FileSystems.getDefault().getPath(qrCodePath);
+        try {
+            MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
+        } catch (IOException e) {
+            throw new IOException("Is currently unable to handle this request");
+        }
+        reservation.setQrCode(qrCode);
+        reservation.setConfirmedAt(LocalDateTime.now());
+        reservation.setStatus("Confirmed");
+        reservationRepository.save(reservation);
+
+        return new ResponseEntity<>("Reservation has been confirmed", HttpStatus.OK);
+    }
+    // / CONFIRM A RESERVATION
 
     // CANCEL A RESERVATION
     public ResponseEntity<?> cancelReservation(ReservationCancelRejectDto reservationCancelDto) throws ResourceNotFoundException {

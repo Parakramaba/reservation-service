@@ -1,5 +1,6 @@
 package com.hifigod.reservationservice.controller;
 
+import com.google.zxing.WriterException;
 import com.hifigod.reservationservice.dto.ReservationCancelRejectDto;
 import com.hifigod.reservationservice.dto.ReservationDto;
 import com.hifigod.reservationservice.dto.Response;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 @RestController
@@ -78,6 +80,15 @@ public class ReservationController {
         return reservationService.getRoomReservedTimesByDate(roomId, date);
     }
     // / GET RESERVED TIMES OF A ROOM
+
+    // CONFIRM A RESERVATION
+    @PutMapping("/confirm/{reservationId}")
+    @ApiOperation(value = "Confirm a reservation")
+    public ResponseEntity<?> confirmReservation(@PathVariable("reservationId") String reservationId)
+            throws ResourceNotFoundException, WriterException, IOException {
+        return reservationService.confirmReservation(reservationId);
+    }
+    // / CONFIRM A RESERVATION
 
     // CANCEL A RESERVATION
     @PutMapping("/cancel")
