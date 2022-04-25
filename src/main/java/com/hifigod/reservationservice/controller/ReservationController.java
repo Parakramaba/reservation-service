@@ -43,32 +43,32 @@ public class ReservationController {
     }
     // / GET RESERVATION DETAILS
 
-    // USER RESERVATIONS
-    @GetMapping("/past/of-user/{userId}")
-    @ApiOperation(value = "Get past reservations of a user")
-    public ResponseEntity<?> getPastReservationsOfUser(@PathVariable("userId") String userId) throws ResourceNotFoundException {
-        return reservationService.getPastReservationsOfUser(userId);
-    }
-
-    @GetMapping("/upcoming/of-user/{userId}")
-    @ApiOperation(value = "Get upcoming reservations of a user")
-    public ResponseEntity<?> getUpcomingReservationsOfUser(@PathVariable("userId") String userId) throws ResourceNotFoundException {
-        return reservationService.getUpcomingReservationsOfUser(userId);
-    }
-    // / USER RESERVATIONS
-
-    // ROOM RESERVATIONS
-    @GetMapping("/past/of-room/{roomId}")
-    @ApiOperation(value = "Get past reservations of a room")
-    public ResponseEntity<?> getPastReservationsOfRoom(@PathVariable("roomId") String roomId) throws ResourceNotFoundException {
-        return reservationService.getPastReservationsOfRoom(roomId);
-    }
-
-    @GetMapping("/upcoming/of-room/{roomId}")
-    @ApiOperation(value = "Get upcoming reservations of a room")
-    public ResponseEntity<?> getUpcomingReservationsOfRoom(@PathVariable("roomId") String roomId) throws ResourceNotFoundException {
-        return reservationService.getUpcomingReservationsOfRoom(roomId);
-    }
+//    // USER RESERVATIONS
+//    @GetMapping("/past/of-user/{userId}")
+//    @ApiOperation(value = "Get past reservations of a user")
+//    public ResponseEntity<?> getPastReservationsOfUser(@PathVariable("userId") String userId) throws ResourceNotFoundException {
+//        return reservationService.getPastReservationsOfUser(userId);
+//    }
+//
+//    @GetMapping("/upcoming/of-user/{userId}")
+//    @ApiOperation(value = "Get upcoming reservations of a user")
+//    public ResponseEntity<?> getUpcomingReservationsOfUser(@PathVariable("userId") String userId) throws ResourceNotFoundException {
+//        return reservationService.getUpcomingReservationsOfUser(userId);
+//    }
+//    // / USER RESERVATIONS
+//
+//    // ROOM RESERVATIONS
+//    @GetMapping("/past/of-room/{roomId}")
+//    @ApiOperation(value = "Get past reservations of a room")
+//    public ResponseEntity<?> getPastReservationsOfRoom(@PathVariable("roomId") String roomId) throws ResourceNotFoundException {
+//        return reservationService.getPastReservationsOfRoom(roomId);
+//    }
+//
+//    @GetMapping("/upcoming/of-room/{roomId}")
+//    @ApiOperation(value = "Get upcoming reservations of a room")
+//    public ResponseEntity<?> getUpcomingReservationsOfRoom(@PathVariable("roomId") String roomId) throws ResourceNotFoundException {
+//        return reservationService.getUpcomingReservationsOfRoom(roomId);
+//    }
     // / ROOM RESERVATIONS
 
     // GET RESERVED TIMES OF A ROOM

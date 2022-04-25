@@ -19,6 +19,9 @@ public class Room implements Serializable {
     @Id
     private String id;
 
+    @Column(nullable = false, length = 254)
+    private String name;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "hostId", referencedColumnName = "id")
 //    @JsonIgnoreProperties({"reservations", "rooms"})

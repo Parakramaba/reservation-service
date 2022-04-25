@@ -38,14 +38,14 @@ public class Reservation implements Serializable {
 //    @Column(nullable = false)
 //    private LocalDate reservedAt;
 
-    @Column(nullable = false)
-    private String session;
+//    @Column(nullable = false)
+//    private String session;
 
-    @Column(nullable = false)
-    private LocalDateTime startTime;
-
-    @Column(nullable = false)
-    private LocalDateTime endTime;
+//    @Column(nullable = false)
+//    private LocalDateTime startTime;
+//
+//    @Column(nullable = false)
+//    private LocalDateTime endTime;
 
     @Generated(value = GenerationTime.INSERT)
     @Column(columnDefinition = "varchar(20) default 'Pending'")
@@ -74,9 +74,9 @@ public class Reservation implements Serializable {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-//    @OneToMany(mappedBy = "reservation")
-//    @JsonIgnoreProperties("reservation")
-//    private List<ReservationTime> reservationTimes;
+    @OneToMany(mappedBy = "reservation")
+    @JsonIgnoreProperties("reservation")
+    private List<ReservationTime> reservationTimes;
 
     @OneToMany(mappedBy = "reservation")
     @JsonIgnore

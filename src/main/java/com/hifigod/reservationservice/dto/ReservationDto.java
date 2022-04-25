@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @ApiModel(description = "Details of the reservation")
 @AllArgsConstructor
@@ -22,16 +23,16 @@ public class ReservationDto {
 
 //    private LocalDate reservedDate;
 
-    @ApiModelProperty(notes = "Morning or Evening")
-    private String session;
+//    @ApiModelProperty(notes = "Morning or Evening")
+//    private String session;
+//
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+//    private LocalDateTime startTime;
+//
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+//    private LocalDateTime endTime;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime startTime;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime endTime;
-
-//    @ApiModelProperty(notes = "List of reservation time")
-//    private List<ReservationTimeDto> reservationTimes;
+    @ApiModelProperty(notes = "List of reservation times")
+    private List<ReservationTimeDto> reservationTimes;
 
 }

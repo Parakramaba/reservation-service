@@ -19,6 +19,9 @@ public class User implements Serializable {
     @Id
     private String id;
 
+    @Column(nullable = false, length = 254)
+    private String name;
+
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<Reservation> reservations;
