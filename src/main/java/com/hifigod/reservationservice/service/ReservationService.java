@@ -92,7 +92,7 @@ public class ReservationService {
 //            startTime = startTime.plusMinutes(30);
 //        }
 
-         // Save reservation time slots
+         // Set the times of the reservation
         if(reservationDto.getReservationTimes() == null || reservationDto.getReservationTimes().isEmpty())
             throw new ValidationException("Please select at least one reservation time");
 
@@ -115,6 +115,7 @@ public class ReservationService {
 
             LocalDateTime startTime = timeOfReservation.getStartTime();
 
+            // Set the reservedTimes of the room relevant with the reservation
             while(startTime.compareTo(timeOfReservation.getEndTime()) < 0) {
 
                 RoomReservedTime reservedTime = new RoomReservedTime();
@@ -151,51 +152,51 @@ public class ReservationService {
     // / GET RESERVATION DETAILS
 
     // USER RESERVATIONS
-//    public ResponseEntity<?> getPastReservationsOfUser(String userId) throws ResourceNotFoundException {
-//        User user = userRepository.findById(userId).orElseThrow(()
-//                -> new ResourceNotFoundException("User not found : " + userId));
-//        List<Reservation> reservations = reservationRepository
-//                .findAllByUserIdAndEndTimeBefore(userId, LocalDateTime.now());
-//        if(reservations.isEmpty())
-//            return new ResponseEntity<>("There are no past reservations found for the user : " + userId, HttpStatus.OK);
-//
-//        return new ResponseEntity<>(reservations, HttpStatus.OK);
-//    }
-//
-//    public ResponseEntity<?> getUpcomingReservationsOfUser(String userId) throws ResourceNotFoundException {
-//        User user = userRepository.findById(userId).orElseThrow(()
-//                -> new ResourceNotFoundException("User not found : " + userId));
-//        List<Reservation> reservations = reservationRepository
-//                .findAllByUserIdAndStartTimeAfter(userId, LocalDateTime.now());
-//        if(reservations.isEmpty())
-//            return new ResponseEntity<>("There are no upcoming reservations found for the user : " + userId, HttpStatus.OK);
-//
-//        return new ResponseEntity<>(reservations, HttpStatus.OK);
-//    }
-//    // / USER RESERVATIONS
-//
-//    // ROOM RESERVATIONS
-//    public ResponseEntity<?> getPastReservationsOfRoom(String roomId) throws ResourceNotFoundException {
-//        Room room = roomRepository.findById(roomId).orElseThrow(()
-//                -> new ResourceNotFoundException("Room not found : " + roomId));
-//        List<Reservation> reservations = reservationRepository
-//                .findAllByRoomIdAndEndTimeBefore(roomId, LocalDateTime.now());
-//        if(reservations.isEmpty())
-//            return new ResponseEntity<>("There are no past reservations found for the room : " + roomId, HttpStatus.OK);
-//
-//        return new ResponseEntity<>(reservations, HttpStatus.OK);
-//    }
-//
-//    public ResponseEntity<?> getUpcomingReservationsOfRoom(String roomId) throws ResourceNotFoundException {
-//        Room room = roomRepository.findById(roomId).orElseThrow(()
-//                -> new ResourceNotFoundException("Room not found : " + roomId));
-//        List<Reservation> reservations = reservationRepository
-//                .findAllByRoomIdAndStartTimeAfter(roomId, LocalDateTime.now());
-//        if(reservations.isEmpty())
-//            return new ResponseEntity<>("There are no upcoming reservations found for the room : " + roomId, HttpStatus.OK);
-//
-//        return new ResponseEntity<>(reservations, HttpStatus.OK);
-//    }
+    public ResponseEntity<?> getPastReservationsOfUser(String userId) throws ResourceNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(()
+                -> new ResourceNotFoundException("User not found : " + userId));
+        List<ReservationTime> reservations = reservationTimeRepository
+                .findAllByUserIdAndEndTimeBefore(userId, LocalDateTime.now());
+        if(reservations.isEmpty())
+            return new ResponseEntity<>("There are no past reservations found for the user : " + userId, HttpStatus.OK);
+
+        return new ResponseEntity<>(reservations, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> getUpcomingReservationsOfUser(String userId) throws ResourceNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(()
+                -> new ResourceNotFoundException("User not found : " + userId));
+        List<ReservationTime> reservations = reservationTimeRepository
+                .findAllByUserIdAndStartTimeAfter(userId, LocalDateTime.now());
+        if(reservations.isEmpty())
+            return new ResponseEntity<>("There are no upcoming reservations found for the user : " + userId, HttpStatus.OK);
+
+        return new ResponseEntity<>(reservations, HttpStatus.OK);
+    }
+    // / USER RESERVATIONS
+
+    // ROOM RESERVATIONS
+    public ResponseEntity<?> getPastReservationsOfRoom(String roomId) throws ResourceNotFoundException {
+        Room room = roomRepository.findById(roomId).orElseThrow(()
+                -> new ResourceNotFoundException("Room not found : " + roomId));
+        List<ReservationTime> reservations = reservationTimeRepository
+                .findAllByRoomIdAndEndTimeBefore(roomId, LocalDateTime.now());
+        if(reservations.isEmpty())
+            return new ResponseEntity<>("There are no past reservations found for the room : " + roomId, HttpStatus.OK);
+
+        return new ResponseEntity<>(reservations, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> getUpcomingReservationsOfRoom(String roomId) throws ResourceNotFoundException {
+        Room room = roomRepository.findById(roomId).orElseThrow(()
+                -> new ResourceNotFoundException("Room not found : " + roomId));
+        List<ReservationTime> reservations = reservationTimeRepository
+                .findAllByRoomIdAndStartTimeAfter(roomId, LocalDateTime.now());
+        if(reservations.isEmpty())
+            return new ResponseEntity<>("There are no upcoming reservations found for the room : " + roomId, HttpStatus.OK);
+
+        return new ResponseEntity<>(reservations, HttpStatus.OK);
+    }
     // / ROOM RESERVATIONS
 
     // GET RESERVED TIMES OF A ROOM
