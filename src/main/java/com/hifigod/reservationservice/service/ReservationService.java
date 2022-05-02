@@ -215,6 +215,8 @@ public class ReservationService {
     // CONFIRM A RESERVATION
     public ResponseEntity<?> confirmReservation(String reservationId)
             throws ResourceNotFoundException, WriterException, IOException {
+        // TODO: update this functionality align with updated db design
+
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(()
                 -> new ResourceNotFoundException("Reservation not found : " + reservationId));
 
