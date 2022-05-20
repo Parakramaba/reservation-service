@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
+    public ResponseEntity<?> handleResourceNotFoundException(final ResourceNotFoundException ex, final WebRequest request) {
         Response errorDetails = new Response(HttpStatus.NOT_FOUND.value(),
                 request.getDescription(false),
                 ex.getMessage(),
@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<?> handleValidationException(ValidationException ex, WebRequest request) {
+    public ResponseEntity<?> handleValidationException(final ValidationException ex, final WebRequest request) {
         Response errorDetails = new Response(HttpStatus.BAD_REQUEST.value(),
                 request.getDescription(false),
                 ex.getMessage(),
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IOException.class)
-    public ResponseEntity<?> handleIOException(IOException ex, WebRequest request) {
+    public ResponseEntity<?> handleIOException(final IOException ex, final WebRequest request) {
         Response errorDetails = new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 request.getDescription(false),
                 ex.getMessage(),
@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(WriterException.class)
-    public ResponseEntity<?> handleWriterException(WriterException ex, WebRequest request) {
+    public ResponseEntity<?> handleWriterException(final WriterException ex, final WebRequest request) {
         Response errorDetails = new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 request.getDescription(false),
                 ex.getMessage(),
