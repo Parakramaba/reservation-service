@@ -59,7 +59,7 @@ public class ReservationService {
 
 
     // MAKE A NEW RESERVATION
-    public ResponseEntity<?> makeReservation(ReservationDto reservationDto)
+    public ResponseEntity<?> makeReservation(final ReservationDto reservationDto)
             throws ResourceNotFoundException, ValidationException {
         User user = userRepository.findById(reservationDto.getUserId()).orElseThrow(()
                 -> new ResourceNotFoundException("User not found : " + reservationDto.getUserId()));
@@ -144,7 +144,7 @@ public class ReservationService {
     // / MAKE A NEW RESERVATION
 
     // GET RESERVATION DETAILS
-    public ResponseEntity<?> getReservationDetails(String reservationId) throws ResourceNotFoundException {
+    public ResponseEntity<?> getReservationDetails(final String reservationId) throws ResourceNotFoundException {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(()
                 -> new ResourceNotFoundException("Reservation not found : " + reservationId));
         return new ResponseEntity<>(reservation, HttpStatus.OK);
@@ -152,7 +152,7 @@ public class ReservationService {
     // / GET RESERVATION DETAILS
 
     // USER RESERVATIONS
-    public ResponseEntity<?> getPastReservationsOfUser(String userId) throws ResourceNotFoundException {
+    public ResponseEntity<?> getPastReservationsOfUser(final String userId) throws ResourceNotFoundException {
         User user = userRepository.findById(userId).orElseThrow(()
                 -> new ResourceNotFoundException("User not found : " + userId));
         List<ReservationTime> reservations = reservationTimeRepository
@@ -163,7 +163,7 @@ public class ReservationService {
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
 
-    public ResponseEntity<?> getUpcomingReservationsOfUser(String userId) throws ResourceNotFoundException {
+    public ResponseEntity<?> getUpcomingReservationsOfUser(final String userId) throws ResourceNotFoundException {
         User user = userRepository.findById(userId).orElseThrow(()
                 -> new ResourceNotFoundException("User not found : " + userId));
         List<ReservationTime> reservations = reservationTimeRepository
@@ -176,7 +176,7 @@ public class ReservationService {
     // / USER RESERVATIONS
 
     // ROOM RESERVATIONS
-    public ResponseEntity<?> getPastReservationsOfRoom(String roomId) throws ResourceNotFoundException {
+    public ResponseEntity<?> getPastReservationsOfRoom(final String roomId) throws ResourceNotFoundException {
         Room room = roomRepository.findById(roomId).orElseThrow(()
                 -> new ResourceNotFoundException("Room not found : " + roomId));
         List<ReservationTime> reservations = reservationTimeRepository
@@ -187,7 +187,7 @@ public class ReservationService {
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
 
-    public ResponseEntity<?> getUpcomingReservationsOfRoom(String roomId) throws ResourceNotFoundException {
+    public ResponseEntity<?> getUpcomingReservationsOfRoom(final String roomId) throws ResourceNotFoundException {
         Room room = roomRepository.findById(roomId).orElseThrow(()
                 -> new ResourceNotFoundException("Room not found : " + roomId));
         List<ReservationTime> reservations = reservationTimeRepository
@@ -200,7 +200,7 @@ public class ReservationService {
     // / ROOM RESERVATIONS
 
     // GET RESERVED TIMES OF A ROOM
-    public ResponseEntity<?> getRoomReservedTimesByDate(String roomId, LocalDate date) throws ResourceNotFoundException {
+    public ResponseEntity<?> getRoomReservedTimesByDate(final String roomId, final LocalDate date) throws ResourceNotFoundException {
         Room room = roomRepository.findById(roomId).orElseThrow(()
                 -> new ResourceNotFoundException("Room not found : " + roomId));
         List<RoomReservedTime> reservedTimes = roomReservedTimeRepository
@@ -213,7 +213,7 @@ public class ReservationService {
     // / GET RESERVED TIMES OF A ROOM
 
     // CONFIRM A RESERVATION
-    public ResponseEntity<?> confirmReservation(String reservationId)
+    public ResponseEntity<?> confirmReservation(final String reservationId)
             throws ResourceNotFoundException, WriterException, IOException {
         // TODO: update this functionality align with updated db design
 
@@ -255,7 +255,7 @@ public class ReservationService {
     // / CONFIRM A RESERVATION
 
     // CANCEL A RESERVATION
-    public ResponseEntity<?> cancelReservation(ReservationCancelRejectDto reservationCancelDto) throws ResourceNotFoundException {
+    public ResponseEntity<?> cancelReservation(final ReservationCancelRejectDto reservationCancelDto) throws ResourceNotFoundException {
         Reservation reservation = reservationRepository.findById(reservationCancelDto.getReservationId()).orElseThrow(()
                 -> new ResourceNotFoundException("Reservation not found : " + reservationCancelDto.getReservationId()));
 
@@ -270,7 +270,7 @@ public class ReservationService {
     // / CANCEL A RESERVATION
 
     // REJECT A RESERVATION
-    public ResponseEntity<?> rejectReservation(ReservationCancelRejectDto reservationRejectDto) throws ResourceNotFoundException {
+    public ResponseEntity<?> rejectReservation(final ReservationCancelRejectDto reservationRejectDto) throws ResourceNotFoundException {
         Reservation reservation = reservationRepository.findById(reservationRejectDto.getReservationId()).orElseThrow(()
                 -> new ResourceNotFoundException("Reservation not found : " + reservationRejectDto.getReservationId()));
 
