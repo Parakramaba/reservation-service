@@ -3,15 +3,12 @@ package com.hifigod.reservationservice.controller;
 import com.google.zxing.WriterException;
 import com.hifigod.reservationservice.dto.ReservationCancelRejectDto;
 import com.hifigod.reservationservice.dto.ReservationDto;
-import com.hifigod.reservationservice.dto.Response;
 import com.hifigod.reservationservice.exception.ResourceNotFoundException;
 import com.hifigod.reservationservice.exception.ValidationException;
 import com.hifigod.reservationservice.service.ReservationService;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

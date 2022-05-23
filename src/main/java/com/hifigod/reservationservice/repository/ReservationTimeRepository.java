@@ -1,6 +1,5 @@
 package com.hifigod.reservationservice.repository;
 
-import com.hifigod.reservationservice.model.Reservation;
 import com.hifigod.reservationservice.model.ReservationTime;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
