@@ -151,7 +151,7 @@ public class ReservationService {
 
     // USER RESERVATIONS
     public ResponseEntity<?> getPastReservationsOfUser(final String userId) throws ResourceNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(()
+        userRepository.findById(userId).orElseThrow(()
                 -> new ResourceNotFoundException("User not found : " + userId));
         List<ReservationTime> reservations = reservationTimeRepository
                 .findAllByUserIdAndEndTimeBefore(userId, LocalDateTime.now());
@@ -162,7 +162,7 @@ public class ReservationService {
     }
 
     public ResponseEntity<?> getUpcomingReservationsOfUser(final String userId) throws ResourceNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(()
+        userRepository.findById(userId).orElseThrow(()
                 -> new ResourceNotFoundException("User not found : " + userId));
         List<ReservationTime> reservations = reservationTimeRepository
                 .findAllByUserIdAndStartTimeAfter(userId, LocalDateTime.now());
@@ -175,7 +175,7 @@ public class ReservationService {
 
     // ROOM RESERVATIONS
     public ResponseEntity<?> getPastReservationsOfRoom(final String roomId) throws ResourceNotFoundException {
-        Room room = roomRepository.findById(roomId).orElseThrow(()
+        roomRepository.findById(roomId).orElseThrow(()
                 -> new ResourceNotFoundException("Room not found : " + roomId));
         List<ReservationTime> reservations = reservationTimeRepository
                 .findAllByRoomIdAndEndTimeBefore(roomId, LocalDateTime.now());
@@ -186,7 +186,7 @@ public class ReservationService {
     }
 
     public ResponseEntity<?> getUpcomingReservationsOfRoom(final String roomId) throws ResourceNotFoundException {
-        Room room = roomRepository.findById(roomId).orElseThrow(()
+        roomRepository.findById(roomId).orElseThrow(()
                 -> new ResourceNotFoundException("Room not found : " + roomId));
         List<ReservationTime> reservations = reservationTimeRepository
                 .findAllByRoomIdAndStartTimeAfter(roomId, LocalDateTime.now());
@@ -199,7 +199,7 @@ public class ReservationService {
 
     // GET RESERVED TIMES OF A ROOM
     public ResponseEntity<?> getRoomReservedTimesByDate(final String roomId, final LocalDate date) throws ResourceNotFoundException {
-        Room room = roomRepository.findById(roomId).orElseThrow(()
+        roomRepository.findById(roomId).orElseThrow(()
                 -> new ResourceNotFoundException("Room not found : " + roomId));
         List<RoomReservedTime> reservedTimes = roomReservedTimeRepository
                 .findAllByRoomIdAndReservedDate(roomId, date);
