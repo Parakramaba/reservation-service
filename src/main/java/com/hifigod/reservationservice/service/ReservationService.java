@@ -91,8 +91,9 @@ public class ReservationService {
 //        }
 
          // Set the times of the reservation
-        if(reservationDto.getReservationTimes() == null || reservationDto.getReservationTimes().isEmpty())
+        if(reservationDto.getReservationTimes() == null || reservationDto.getReservationTimes().isEmpty()) {
             throw new ValidationException("Please select at least one reservation time");
+        }
 
         List<ReservationTime> timesOfReservation = new ArrayList<>();
         List<RoomReservedTime> reservedTimes = new ArrayList<>();
@@ -157,8 +158,9 @@ public class ReservationService {
                 -> new ResourceNotFoundException("User not found : " + userId));
         List<ReservationTime> reservations = reservationTimeRepository
                 .findAllByUserIdAndEndTimeBefore(userId, LocalDateTime.now());
-        if(reservations.isEmpty())
+        if(reservations.isEmpty()) {
             return new ResponseEntity<>("There are no past reservations found for the user : " + userId, HttpStatus.OK);
+        }
 
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
@@ -168,9 +170,10 @@ public class ReservationService {
                 -> new ResourceNotFoundException("User not found : " + userId));
         List<ReservationTime> reservations = reservationTimeRepository
                 .findAllByUserIdAndStartTimeAfter(userId, LocalDateTime.now());
-        if(reservations.isEmpty())
+        if(reservations.isEmpty()) {
             return new ResponseEntity<>("There are no upcoming reservations found for the user : " + userId,
                     HttpStatus.OK);
+        }
 
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
@@ -182,8 +185,9 @@ public class ReservationService {
                 -> new ResourceNotFoundException("Room not found : " + roomId));
         List<ReservationTime> reservations = reservationTimeRepository
                 .findAllByRoomIdAndEndTimeBefore(roomId, LocalDateTime.now());
-        if(reservations.isEmpty())
+        if(reservations.isEmpty()) {
             return new ResponseEntity<>("There are no past reservations found for the room : " + roomId, HttpStatus.OK);
+        }
 
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
@@ -193,9 +197,10 @@ public class ReservationService {
                 -> new ResourceNotFoundException("Room not found : " + roomId));
         List<ReservationTime> reservations = reservationTimeRepository
                 .findAllByRoomIdAndStartTimeAfter(roomId, LocalDateTime.now());
-        if(reservations.isEmpty())
+        if(reservations.isEmpty()) {
             return new ResponseEntity<>("There are no upcoming reservations found for the room : " + roomId,
                     HttpStatus.OK);
+        }
 
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
@@ -208,8 +213,9 @@ public class ReservationService {
                 -> new ResourceNotFoundException("Room not found : " + roomId));
         List<RoomReservedTime> reservedTimes = roomReservedTimeRepository
                 .findAllByRoomIdAndReservedDate(roomId, date);
-        if(reservedTimes.isEmpty())
+        if(reservedTimes.isEmpty()) {
             return new ResponseEntity<>("There are no reserved times found for the room : " + roomId, HttpStatus.OK);
+        }
 
         return new ResponseEntity<>(reservedTimes, HttpStatus.OK);
     }
@@ -264,8 +270,9 @@ public class ReservationService {
                 -> new ResourceNotFoundException("Reservation not found : " + reservationCancelDto.getReservationId()));
 
         reservation.setStatus("Cancelled");
-        if(reservationCancelDto.getMessage() != null && reservationCancelDto.getMessage().length() > 0)
+        if(reservationCancelDto.getMessage() != null && reservationCancelDto.getMessage().length() > 0) {
             reservation.setMessage(reservationCancelDto.getMessage());
+        }
         reservation.setCancelledAt(LocalDateTime.now());
         reservationRepository.save(reservation);
 
@@ -280,8 +287,9 @@ public class ReservationService {
                 -> new ResourceNotFoundException("Reservation not found : " + reservationRejectDto.getReservationId()));
 
         reservation.setStatus("Rejected");
-        if(reservationRejectDto.getMessage() != null && reservationRejectDto.getMessage().length() > 0)
+        if(reservationRejectDto.getMessage() != null && reservationRejectDto.getMessage().length() > 0) {
             reservation.setMessage(reservationRejectDto.getMessage());
+        }
         reservation.setRejectedAt(LocalDateTime.now());
         reservationRepository.save(reservation);
 
