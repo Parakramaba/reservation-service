@@ -15,7 +15,8 @@ import java.time.LocalDateTime;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<?> handleResourceNotFoundException(final ResourceNotFoundException ex, final WebRequest request) {
+    public ResponseEntity<?> handleResourceNotFoundException(final ResourceNotFoundException ex,
+                                                             final WebRequest request) {
         Response errorDetails = new Response(HttpStatus.NOT_FOUND.value(),
                 request.getDescription(false),
                 ex.getMessage(),

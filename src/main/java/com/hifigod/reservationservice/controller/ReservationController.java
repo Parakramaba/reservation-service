@@ -35,7 +35,8 @@ public class ReservationController {
     // GET RESERVATION DETAILS
     @GetMapping("/{reservationId}")
     @ApiOperation(value = "Get the reservation details")
-    ResponseEntity<?> getReservationDetails(final @PathVariable("reservationId") String reservationId) throws ResourceNotFoundException {
+    ResponseEntity<?> getReservationDetails(final @PathVariable("reservationId") String reservationId)
+            throws ResourceNotFoundException {
         return reservationService.getReservationDetails(reservationId);
     }
     // / GET RESERVATION DETAILS
@@ -43,13 +44,15 @@ public class ReservationController {
     // USER RESERVATIONS
     @GetMapping("/past/of-user/{userId}")
     @ApiOperation(value = "Get past reservations of a user")
-    public ResponseEntity<?> getPastReservationsOfUser(final @PathVariable("userId") String userId) throws ResourceNotFoundException {
+    public ResponseEntity<?> getPastReservationsOfUser(final @PathVariable("userId") String userId)
+            throws ResourceNotFoundException {
         return reservationService.getPastReservationsOfUser(userId);
     }
 
     @GetMapping("/upcoming/of-user/{userId}")
     @ApiOperation(value = "Get upcoming reservations of a user")
-    public ResponseEntity<?> getUpcomingReservationsOfUser(final @PathVariable("userId") String userId) throws ResourceNotFoundException {
+    public ResponseEntity<?> getUpcomingReservationsOfUser(final @PathVariable("userId") String userId)
+            throws ResourceNotFoundException {
         return reservationService.getUpcomingReservationsOfUser(userId);
     }
     // / USER RESERVATIONS
@@ -57,13 +60,15 @@ public class ReservationController {
     // ROOM RESERVATIONS
     @GetMapping("/past/of-room/{roomId}")
     @ApiOperation(value = "Get past reservations of a room")
-    public ResponseEntity<?> getPastReservationsOfRoom(final @PathVariable("roomId") String roomId) throws ResourceNotFoundException {
+    public ResponseEntity<?> getPastReservationsOfRoom(final @PathVariable("roomId") String roomId)
+            throws ResourceNotFoundException {
         return reservationService.getPastReservationsOfRoom(roomId);
     }
 
     @GetMapping("/upcoming/of-room/{roomId}")
     @ApiOperation(value = "Get upcoming reservations of a room")
-    public ResponseEntity<?> getUpcomingReservationsOfRoom(final @PathVariable("roomId") String roomId) throws ResourceNotFoundException {
+    public ResponseEntity<?> getUpcomingReservationsOfRoom(final @PathVariable("roomId") String roomId)
+            throws ResourceNotFoundException {
         return reservationService.getUpcomingReservationsOfRoom(roomId);
     }
     // / ROOM RESERVATIONS
@@ -72,7 +77,8 @@ public class ReservationController {
     @GetMapping("/reserved-times/{roomId}/{date}")
     @ApiOperation(value = "Get reserved times of a room by date",
             notes = "Provide valid roomId and Date in format of yyyy-MM-dd")
-    public ResponseEntity<?> getRoomReservedTimesByDate(final @PathVariable("roomId") String roomId, final @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date)
+    public ResponseEntity<?> getRoomReservedTimesByDate(final @PathVariable("roomId") String roomId,
+            final @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date)
             throws ResourceNotFoundException {
         return reservationService.getRoomReservedTimesByDate(roomId, date);
     }
@@ -90,7 +96,8 @@ public class ReservationController {
     // CANCEL A RESERVATION
     @PutMapping("/cancel")
     @ApiOperation(value = "Cancel a reservation")
-    public ResponseEntity<?> cancelReservation(final @RequestBody ReservationCancelRejectDto reservationCancelDto) throws ResourceNotFoundException {
+    public ResponseEntity<?> cancelReservation(final @RequestBody ReservationCancelRejectDto reservationCancelDto)
+            throws ResourceNotFoundException {
         return reservationService.cancelReservation(reservationCancelDto);
     }
     // / CANCEL A RESERVATION
@@ -98,7 +105,8 @@ public class ReservationController {
     // REJECT A RESERVATION
     @PutMapping("/reject")
     @ApiOperation(value = "Reject a reservation")
-    public ResponseEntity<?> rejectReservation(final @RequestBody ReservationCancelRejectDto reservationRejectDto) throws ResourceNotFoundException {
+    public ResponseEntity<?> rejectReservation(final @RequestBody ReservationCancelRejectDto reservationRejectDto)
+            throws ResourceNotFoundException {
         return reservationService.rejectReservation(reservationRejectDto);
     }
     // / REJECT A RESERVATION
