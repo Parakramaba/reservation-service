@@ -124,7 +124,9 @@ public class ReservationService {
                 reservedTime.setReservedDate(startTime.toLocalDate());
                 reservedTime.setReservedTime(startTime.toLocalTime());
                 reservedTimes.add(reservedTime);
+                //CHECKSTYLE:OFF
                 startTime = startTime.plusMinutes(30);
+                //CHECKSTYLE:ON
             }
         }
         reservationRepository.save(reservation);
