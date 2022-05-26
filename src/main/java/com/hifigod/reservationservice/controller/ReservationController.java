@@ -35,7 +35,7 @@ public class ReservationController {
     // GET RESERVATION DETAILS
     @GetMapping("/{reservationId}")
     @ApiOperation(value = "Get the reservation details")
-    ResponseEntity<?> getReservationDetails(final @PathVariable("reservationId") String reservationId)
+    public ResponseEntity<?> getReservationDetails(final @PathVariable("reservationId") String reservationId)
             throws ResourceNotFoundException {
         return reservationService.getReservationDetails(reservationId);
     }
