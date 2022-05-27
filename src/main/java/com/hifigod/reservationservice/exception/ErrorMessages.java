@@ -1,5 +1,8 @@
 package com.hifigod.reservationservice.exception;
 
+/**
+ * This class holds set of reusable constants for error messages
+ */
 public final class ErrorMessages {
 
     public static final String USER_NOT_FOUND_MSG = "User not found : ";

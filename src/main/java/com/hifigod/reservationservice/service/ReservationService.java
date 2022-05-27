@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- *
  * This Service class implements the endpoints which are using in the Reservation handling process
  * */
 @Service("ReservationService")
@@ -151,7 +150,6 @@ public class ReservationService {
 
     // GET RESERVATION DETAILS
     /**
-     *
      * This returns a ResponseEntity with the details of a reservation. The reservationId must be valid,
      * otherwise an exception will be thrown
      * @param reservationId ID of a reservation, not null
@@ -160,16 +158,15 @@ public class ReservationService {
      * */
     public ResponseEntity<?> getReservationDetails(final String reservationId) throws ResourceNotFoundException {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(()
-                -> new ResourceNotFoundException(ErrorMessages.RESERVATION_NOT_FOUND_MSG+ reservationId));
+                -> new ResourceNotFoundException(ErrorMessages.RESERVATION_NOT_FOUND_MSG + reservationId));
         return new ResponseEntity<>(reservation, HttpStatus.OK);
     }
     // / GET RESERVATION DETAILS
 
     // USER RESERVATIONS
     /**
-     *
      * This returns a ResponseEntity with the List of past reservations of a user. The userId must be valid,
-     * otherwise an exception will be thrown.
+     * otherwise an exception will be thrown
      * @param userId ID of the user, not null
      * @return List of past reservations of a user, not null
      * @throws ResourceNotFoundException If the userId is invalid
@@ -187,7 +184,6 @@ public class ReservationService {
     }
 
     /**
-     *
      * This returns a ResponseEntity with the List of upcoming reservations of a user. The userId must be valid,
      * otherwise an exception will be thrown
      * @param userId ID of the user, not null
@@ -210,7 +206,6 @@ public class ReservationService {
 
     // ROOM RESERVATIONS
     /**
-     *
      * This returns a ResponseEntity with the List of past reservations of a room. The roomId must be valid,
      * otherwise an exception will be thrown
      * @param roomId ID of the room, not null
@@ -230,7 +225,6 @@ public class ReservationService {
     }
 
     /**
-     *
      * This returns a ResponseEntity with the List of upcoming reservations of a room. The roomId must be valid,
      * otherwise an exception will be thrown
      * @param roomId ID of the room, not null
@@ -254,7 +248,6 @@ public class ReservationService {
     // GET RESERVED TIMES OF A ROOM
 
     /**
-     *
      * This returns a ResponseEntity with the List of reservations of a room for a certain date.
      * The roomId must be valid, and date must be in format of 'yyyy-MM-dd', otherwise an exception will be thrown
      * @param roomId ID of the room, not null
@@ -279,7 +272,6 @@ public class ReservationService {
     // CONFIRM A RESERVATION
 
 //    /**
-//     *
 //     * This returns a ResponseEntity with the Success message. Will be generated a QR Code that can be used for
 //     * confirmation of the reservation. The reservationId must be valid, otherwise an exception will be thrown
 //     * @param reservationId ID of the reservation
