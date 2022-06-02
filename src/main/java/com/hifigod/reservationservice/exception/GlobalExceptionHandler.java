@@ -12,13 +12,13 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 /**
- * This GlobalExceptionHandler class provides set of methods to handle exceptions
+ * This GlobalExceptionHandler class provides set of methods to handle exceptions.
  */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     /**
-     * This handler method returns a ResponseEntity with the details of the ResourceNotFoundException
+     * This handler method returns a ResponseEntity with the details of the ResourceNotFoundException.
      * @param ex ResourceNotFoundException object, not null
      * @param request WebRequest object, not null
      * @return Details of the exception, not null
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * This handler method returns a ResponseEntity with the details of the ValidationException
+     * This handler method returns a ResponseEntity with the details of the ValidationException.
      * @param ex ValidationException object, not null
      * @param request WebRequest object, not null
      * @return Details of the exception, not null
@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * This handler method returns a ResponseEntity with the details of the IOException
+     * This handler method returns a ResponseEntity with the details of the IOException.
      * @param ex IOException object, not null
      * @param request WebRequest object, not null
      * @return Details of the exception, not null
@@ -70,7 +70,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * This handler method returns a ResponseEntity with the details of the WriterException
+     * This handler method returns a ResponseEntity with the details of the WriterException.
      * @param ex WriterException object, not null
      * @param request WebRequest object, not null
      * @return Details of the exception, not null

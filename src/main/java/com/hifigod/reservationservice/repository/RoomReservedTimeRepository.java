@@ -9,7 +9,7 @@ import java.util.List;
 public interface RoomReservedTimeRepository extends JpaRepository<RoomReservedTime, String> {
 
     /**
-     * This returns List of reserved times of a room for an expected date
+     * This returns List of reserved times of a room for an expected date.
      * @param roomId ID of a room, not null
      * @param date The expected date, not null
      * @return List of reserved times of a room for an expected date, not null

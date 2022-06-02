@@ -10,7 +10,7 @@ import java.util.List;
 public interface ReservationTimeRepository extends JpaRepository<ReservationTime, String> {
 
     /**
-     * This returns List of past reservation details of a user
+     * This returns List of past reservation details of a user.
      * @param userId ID of the user, not null
      * @param timeNow Time of now, not null
      * @return List of past reservation details of a user, not null
@@ -19,7 +19,7 @@ public interface ReservationTimeRepository extends JpaRepository<ReservationTime
     List<ReservationTime> findAllByUserIdAndEndTimeBefore(String userId, LocalDateTime timeNow);
 
     /**
-     * This returns List of upcoming reservation details of a user
+     * This returns List of upcoming reservation details of a user.
      * @param userId ID of the user, not null
      * @param timeNow Time of now, not null
      * @return List of upcoming reservation details of a user, not null
@@ -28,7 +28,7 @@ public interface ReservationTimeRepository extends JpaRepository<ReservationTime
     List<ReservationTime> findAllByUserIdAndStartTimeAfter(String userId, LocalDateTime timeNow);
 
     /**
-     * This returns List of past reservation details of a room
+     * This returns List of past reservation details of a room.
      * @param roomId ID of the room, not null
      * @param timeNow Time of now, not null
      * @return List of past reservation details of a room, not null
@@ -37,7 +37,7 @@ public interface ReservationTimeRepository extends JpaRepository<ReservationTime
     List<ReservationTime> findAllByRoomIdAndEndTimeBefore(String roomId, LocalDateTime timeNow);
 
     /**
-     * This returns List of upcoming reservation details of a room
+     * This returns List of upcoming reservation details of a room.
      * @param roomId ID of the room, not null
      * @param timeNow Time of now, not null
      * @return List of upcoming reservation details of a room, not null

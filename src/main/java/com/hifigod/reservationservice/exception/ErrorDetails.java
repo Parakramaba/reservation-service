@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 /**
- * This class holds the set of information that need to pass when an error occurred
+ * This class holds the set of information that need to pass when an error occurred.
  */
 @Data
 @AllArgsConstructor

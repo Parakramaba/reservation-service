@@ -1,7 +1,7 @@
 package com.hifigod.reservationservice.exception;
 
 /**
- * This class holds set of reusable constants for error messages
+ * This class holds set of reusable constants for error messages.
  */
 public final class ErrorMessages {
 

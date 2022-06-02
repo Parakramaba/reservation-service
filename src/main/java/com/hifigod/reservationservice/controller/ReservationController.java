@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 /**
- * This Controller class provide set of API endpoints which are using in the Reservation handling process
+ * This Controller class provide set of API endpoints which are using in the Reservation handling process.
  */
 @RestController
 @RequestMapping("/api/v1/reservations")

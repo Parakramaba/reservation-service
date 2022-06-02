@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * This Service class implements the endpoints which are using in the Reservation handling process
+ * This Service class implements business logic of the endpoints which are using in the Reservation handling process.
  * */
 @Service("ReservationService")
 public class ReservationService {
@@ -54,6 +54,10 @@ public class ReservationService {
     private RoomReservedTimeRepository roomReservedTimeRepository;
     // / INJECT REPOSITORY OBJECT DEPENDENCIES
 
+    // INJECT SERVICE OBJECT DEPENDENCIES
+    @Autowired
+    private UtilService utilService;
+
     // PATH OF QRCODE DIRECTORY
     // The absolute path on the local machine(at the moment) that need to store the QRCodes
     // Ex : "D:\\reservation-service\\images\\qr-codes\\"
@@ -63,10 +67,8 @@ public class ReservationService {
     // MAKE A NEW RESERVATION
     public ResponseEntity<?> makeReservation(final ReservationDto reservationDto)
             throws ResourceNotFoundException, ValidationException {
-        User user = userRepository.findById(reservationDto.getUserId()).orElseThrow(()
-                -> new ResourceNotFoundException(ErrorMessages.USER_NOT_FOUND_MSG + reservationDto.getUserId()));
-        Room room = roomRepository.findById(reservationDto.getRoomId()).orElseThrow(()
-                -> new ResourceNotFoundException(ErrorMessages.ROOM_NOT_FOUND_MSG + reservationDto.getRoomId()));
+        User user = utilService.checkUserById(reservationDto.getUserId());
+        Room room = utilService.checkRoomById(reservationDto.getRoomId());
 
         // Set reservation data
         Reservation reservation = new Reservation();
@@ -157,8 +159,7 @@ public class ReservationService {
      * @throws ResourceNotFoundException If the reservationId is invalid
      * */
     public ResponseEntity<?> getReservationDetails(final String reservationId) throws ResourceNotFoundException {
-        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(()
-                -> new ResourceNotFoundException(ErrorMessages.RESERVATION_NOT_FOUND_MSG + reservationId));
+        Reservation reservation = utilService.checkReservationById(reservationId);
         return new ResponseEntity<>(reservation, HttpStatus.OK);
     }
     // / GET RESERVATION DETAILS
@@ -172,8 +173,7 @@ public class ReservationService {
      * @throws ResourceNotFoundException If the userId is invalid
      */
     public ResponseEntity<?> getPastReservationsOfUser(final String userId) throws ResourceNotFoundException {
-        userRepository.findById(userId).orElseThrow(()
-                -> new ResourceNotFoundException(ErrorMessages.USER_NOT_FOUND_MSG + userId));
+        User user = utilService.checkUserById(userId);
         List<ReservationTime> reservations = reservationTimeRepository
                 .findAllByUserIdAndEndTimeBefore(userId, LocalDateTime.now());
         if (reservations.isEmpty()) {
@@ -191,8 +191,7 @@ public class ReservationService {
      * @throws ResourceNotFoundException If the userId is invalid
      */
     public ResponseEntity<?> getUpcomingReservationsOfUser(final String userId) throws ResourceNotFoundException {
-        userRepository.findById(userId).orElseThrow(()
-                -> new ResourceNotFoundException(ErrorMessages.USER_NOT_FOUND_MSG + userId));
+        utilService.checkUserById(userId);
         List<ReservationTime> reservations = reservationTimeRepository
                 .findAllByUserIdAndStartTimeAfter(userId, LocalDateTime.now());
         if (reservations.isEmpty()) {
@@ -213,8 +212,7 @@ public class ReservationService {
      * @throws ResourceNotFoundException If the roomId is invalid
      */
     public ResponseEntity<?> getPastReservationsOfRoom(final String roomId) throws ResourceNotFoundException {
-        roomRepository.findById(roomId).orElseThrow(()
-                -> new ResourceNotFoundException(ErrorMessages.ROOM_NOT_FOUND_MSG + roomId));
+        utilService.checkRoomById(roomId);
         List<ReservationTime> reservations = reservationTimeRepository
                 .findAllByRoomIdAndEndTimeBefore(roomId, LocalDateTime.now());
         if (reservations.isEmpty()) {
@@ -232,8 +230,7 @@ public class ReservationService {
      * @throws ResourceNotFoundException If the roomId is invalid
      */
     public ResponseEntity<?> getUpcomingReservationsOfRoom(final String roomId) throws ResourceNotFoundException {
-        roomRepository.findById(roomId).orElseThrow(()
-                -> new ResourceNotFoundException(ErrorMessages.ROOM_NOT_FOUND_MSG + roomId));
+        utilService.checkRoomById(roomId);
         List<ReservationTime> reservations = reservationTimeRepository
                 .findAllByRoomIdAndStartTimeAfter(roomId, LocalDateTime.now());
         if (reservations.isEmpty()) {
@@ -257,8 +254,7 @@ public class ReservationService {
      */
     public ResponseEntity<?> getRoomReservedTimesByDate(final String roomId, final LocalDate date)
             throws ResourceNotFoundException {
-        roomRepository.findById(roomId).orElseThrow(()
-                -> new ResourceNotFoundException(ErrorMessages.ROOM_NOT_FOUND_MSG + roomId));
+        utilService.checkRoomById(roomId);
         List<RoomReservedTime> reservedTimes = roomReservedTimeRepository
                 .findAllByRoomIdAndReservedDate(roomId, date);
         if (reservedTimes.isEmpty()) {
@@ -284,8 +280,7 @@ public class ReservationService {
             throws ResourceNotFoundException, WriterException, IOException {
         // TODO: update this functionality align with updated db design
 
-        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(()
-                -> new ResourceNotFoundException(ErrorMessages.RESERVATION_NOT_FOUND_MSG + reservationId));
+        Reservation reservation = utilService.checkReservationById(reservationId);
 
         // TODO: verify what details need to be hold by the QRCode and how to handle the documents
 
@@ -324,9 +319,7 @@ public class ReservationService {
     // CANCEL A RESERVATION
     public ResponseEntity<?> cancelReservation(final ReservationCancelRejectDto reservationCancelDto)
             throws ResourceNotFoundException {
-        Reservation reservation = reservationRepository.findById(reservationCancelDto.getReservationId()).orElseThrow(()
-                -> new ResourceNotFoundException(ErrorMessages.RESERVATION_NOT_FOUND_MSG
-                + reservationCancelDto.getReservationId()));
+        Reservation reservation = utilService.checkReservationById(reservationCancelDto.getReservationId());
 
         reservation.setStatus("Cancelled");
         if (reservationCancelDto.getMessage() != null && reservationCancelDto.getMessage().length() > 0) {
@@ -342,9 +335,7 @@ public class ReservationService {
     // REJECT A RESERVATION
     public ResponseEntity<?> rejectReservation(final ReservationCancelRejectDto reservationRejectDto)
             throws ResourceNotFoundException {
-        Reservation reservation = reservationRepository.findById(reservationRejectDto.getReservationId()).orElseThrow(()
-                -> new ResourceNotFoundException(ErrorMessages.RESERVATION_NOT_FOUND_MSG
-                + reservationRejectDto.getReservationId()));
+        Reservation reservation = utilService.checkReservationById(reservationRejectDto.getReservationId());
 
         reservation.setStatus("Rejected");
         if (reservationRejectDto.getMessage() != null && reservationRejectDto.getMessage().length() > 0) {
